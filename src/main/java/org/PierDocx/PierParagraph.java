@@ -1,14 +1,13 @@
 package org.PierDocx;
 
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 
 import java.util.ArrayList;
 
 
 public class PierParagraph {
-    XWPFParagraph paragraph;
+    public XWPFParagraph paragraph;
     ArrayList<PierRun> runs = new ArrayList<>();
     int size;
 
@@ -32,6 +31,8 @@ public class PierParagraph {
         return run;
     }
 
+    public void add_header(){
+    }
 
     public CTP _getCTP() {
         return this.paragraph.getCTP();
