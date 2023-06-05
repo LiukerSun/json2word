@@ -3,16 +3,15 @@ package org.PierDocx.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.Map;
 
 import org.PierDocx.PierParagraph;
+import org.PierDocx.PierRun;
 import org.PierDocx.style.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.LineSpacingRule;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
+
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFRun.FontCharRange;
-import org.apache.poi.xwpf.usermodel.XWPFTable.XWPFBorderType;
 import org.apache.xmlbeans.SimpleValue;
 import org.openxmlformats.schemas.officeDocument.x2006.sharedTypes.STHexColorRGB;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
@@ -211,157 +210,64 @@ public final class StyleUtils {
         if (null != style.getColor()) b.setColor(style.getColor());
     }
 
-    public static Style retriveStyle(XWPFRun run) {
-        if (null == run) return null;
-        Style.StyleBuilder builder = Style.builder()
-                .buildColor(run.getColor())
-                .buildFontFamily(run.getFontFamily(FontCharRange.eastAsia))
-                .buildWesternFontFamily(run.getFontFamily(FontCharRange.ascii));
-
-        if (null != run.getFontSizeAsDouble()) builder.buildFontSize(run.getFontSizeAsDouble());
-        if (run.isBold()) builder.buildBold();
-        if (run.isItalic()) builder.buildItalic();
-        if (run.isStrikeThrough()) builder.buildStrike();
-        return builder.build();
-    }
-
-    public static ParagraphStyle retriveParagraphStyle(PierParagraph paragraph) {
-        if (null == paragraph) return null;
-        ParagraphStyle.Builder builder = ParagraphStyle.builder();
-        CTP ctp = paragraph.paragraph.getCTP();
-        CTPPr pr = ctp.isSetPPr() ? ctp.getPPr() : ctp.addNewPPr();
-        if (paragraph.paragraph.isWordWrapped()) {
-            builder.withAllowWordBreak(true);
+    public static void styleRun(PierRun run, RunStyle style) {
+        if (null == run || null == style) return;
+        CTRPr pr = getRunProperties(run.run);
+        String color = style.getColor();
+        if (StringUtils.isNotBlank(color)) {
+            // run.setColor(color);
+            // issue 326
+            CTColor ctColor = pr.sizeOfColorArray() > 0 ? pr.getColorArray(0) : pr.addNewColor();
+            ctColor.setVal(color);
+            if (ctColor.isSetThemeColor()) ctColor.unsetThemeColor();
         }
-        if (pr.isSetPBdr()) {
-            CTPBdr ct = pr.getPBdr();
-            if (ct.isSetLeft()) {
-                builder.withLeftBorder(retriveBorderStyle(ct.getLeft()));
+        double fontSize = style.getFontSize();
+        if (0 != fontSize && -1 != fontSize) {
+            run.run.setFontSize(fontSize);
+        }
+        String fontFamily = style.getFontFamily();
+        if (StringUtils.isNotBlank(fontFamily)) {
+            run.run.setFontFamily(fontFamily, XWPFRun.FontCharRange.eastAsia);
+            run.run.setFontFamily(fontFamily, XWPFRun.FontCharRange.ascii);
+            run.run.setFontFamily(fontFamily, XWPFRun.FontCharRange.hAnsi);
+            run.run.setFontFamily(fontFamily, XWPFRun.FontCharRange.cs);
+        }
+        String westernFontFamily = style.getWesternFontFamily();
+        if (StringUtils.isNotBlank(westernFontFamily)) {
+            run.run.setFontFamily(westernFontFamily, XWPFRun.FontCharRange.ascii);
+            run.run.setFontFamily(westernFontFamily, XWPFRun.FontCharRange.hAnsi);
+            run.run.setFontFamily(westernFontFamily, XWPFRun.FontCharRange.cs);
+        }
+        XWPFHighlightColor highlightColor = style.getHighlightColor();
+        if (null != highlightColor) {
+            CTHighlight highlight = pr.sizeOfHighlightArray() > 0 ? pr.getHighlightArray(0) : pr.addNewHighlight();
+            highlight.setVal(STHighlightColor.Enum.forInt(highlightColor.getValue()));
+        }
+        Boolean bold = style.isBold();
+        if (null != bold) run.run.setBold(bold);
+        Boolean italic = style.isItalic();
+        if (null != italic) run.run.setItalic(italic);
+        Boolean strike = style.isStrike();
+        if (null != strike) run.run.setStrikeThrough(strike);
+        UnderlinePatterns underlinePatern = style.getUnderlinePatterns();
+        if (null != underlinePatern) {
+            run.run.setUnderline(underlinePatern);
+            if (null != style.getUnderlineColor()) {
+                run.run.setUnderlineColor(style.getUnderlineColor());
             }
-            if (ct.isSetTop()) {
-                builder.withTopBorder(retriveBorderStyle(ct.getTop()));
-            }
-            if (ct.isSetRight()) {
-                builder.withRightBorder(retriveBorderStyle(ct.getRight()));
-            }
-            if (ct.isSetBottom()) {
-                builder.withBottomBorder(retriveBorderStyle(ct.getBottom()));
-            }
         }
-        if (pr.isSetShd()) {
-            CTShd shd = pr.getShd();
-            builder.withShadingPattern(XWPFShadingPattern.valueOf(shd.getVal().intValue()));
-            if (shd.isSetFill()) builder.withBackgroundColor(shd.xgetFill().getStringValue());
+        int point = style.getCharacterSpacing();
+        // in twentieths of a point
+        if (0 != point && -1 != point) run.run.setCharacterSpacing(UnitUtils.point2Twips(point));
+        String vertAlign = style.getVertAlign();
+        if (StringUtils.isNotBlank(vertAlign)) {
+            run.run.setVerticalAlignment(vertAlign);
         }
-        builder.withAlign(paragraph.paragraph.getAlignment());
-        int spacingBeforeLines = paragraph.paragraph.getSpacingBeforeLines();
-        if (-1 != spacingBeforeLines) {
-            builder.withSpacingBeforeLines(spacingBeforeLines / 100.0f);
-        }
-        int spacingAfterLines = paragraph.paragraph.getSpacingAfterLines();
-        if (-1 != spacingAfterLines) {
-            builder.withSpacingAfterLines(spacingAfterLines / 100.0f);
-        }
-        int spacingBefore = paragraph.paragraph.getSpacingBefore();
-        if (-1 != spacingBefore) {
-            builder.withSpacingBefore(UnitUtils.twips2Point(spacingBefore));
-        }
-        int spacingAfter = paragraph.paragraph.getSpacingAfter();
-        if (-1 != spacingAfter) {
-            builder.withSpacingAfter(UnitUtils.twips2Point(spacingAfter));
-        }
-        double spacingBetween = paragraph.paragraph.getSpacingBetween();
-        if (-1 != spacingBetween) {
-            builder.withSpacing(spacingBetween);
-            builder.withSpacingRule(paragraph.paragraph.getSpacingLineRule());
-        }
-
-        return builder.build();
-    }
-
-    public static BorderStyle retriveBorderStyle(CTBorder border) {
-        BorderStyle.Builder borderBuilder = BorderStyle.builder();
-        if (border.isSetColor()) borderBuilder.withColor(border.xgetColor().getStringValue());
-        if (border.isSetSz()) borderBuilder.withSize(border.getSz().intValue());
-        if (border.getVal() != null)
-            borderBuilder.withType(XWPFBorderType.valueOf(border.getVal().toString().toUpperCase()));
-        return borderBuilder.build();
-    }
-
-    public static Style retriveStyleFromCss(Map<String, String> propertyValues) {
-        Style.StyleBuilder builder = Style.builder();
-        if (propertyValues != null) {
-            String style = propertyValues.get("font-style");
-            String weight = propertyValues.get("font-weight");
-            String color = propertyValues.get("color");
-            String size = propertyValues.get("font-size");
-            if (StringUtils.isNotBlank(style) && "italic".equalsIgnoreCase(style)) {
-                builder.buildItalic();
-            }
-            if (StringUtils.isNotBlank(size)) {
-//                builder.buildFontSize(fontSize);
-            }
-            if (StringUtils.isNotBlank(weight)) {
-                builder.buildBold();
-            }
-            if (StringUtils.isNotBlank(color)) {
-                String rgb = toRgb(color);
-                builder.buildColor(rgb);
-            }
-        } else {
-            return null;
-        }
-        return builder.build();
-    }
-
-    public static ParagraphStyle retriveParagraphStyleFromCss(Map<String, String> propertyValues) {
-        ParagraphStyle.Builder builder = ParagraphStyle.builder();
-        if (propertyValues != null) {
-            String background = propertyValues.get("background");
-            String color = propertyValues.get("color");
-            if (StringUtils.isNotBlank(background)) {
-                builder.withBackgroundColor(toRgb(background));
-            }
-            if (StringUtils.isNotBlank(color)) {
-                String rgb = toRgb(color);
-                builder.withDefaultTextStyle(Style.builder().buildColor(rgb).build());
-            }
-        } else {
-            return null;
-        }
-        return builder.build();
-    }
-
-    public static String toRgb(String color) {
-        // rgb() or rgba()
-        if (color.toUpperCase().startsWith("RGB")) {
-            String val = color.substring(color.indexOf("(") + 1, color.lastIndexOf(")"));
-            String[] rgbArr = val.split(",");
-            return String.format("%02x%02x%02x", Integer.valueOf(rgbArr[0]), Integer.valueOf(rgbArr[1]),
-                    Integer.valueOf(rgbArr[2]));
-        }
-        // css color name
-        try {
-            CssRgb valueOf = CssRgb.valueOf(color.toUpperCase());
-            return valueOf.getRgb().substring(1);
-        } catch (Exception ignored) {
-        }
-        if (!color.startsWith("#")) {
-            // throw new IllegalArgumentException("Unable to Rgb color:" + color);
-            return null;
-        }
-        // #RRGGBB
-        if (color.length() == 7) return color.substring(1);
-        // #RGB
-        if (color.length() == 4) {
-            return String.format("%c%c%c%c%c%c", color.charAt(1), color.charAt(1), color.charAt(2), color.charAt(2),
-                    color.charAt(3), color.charAt(3));
-        }
-        return color.length() > 7 ? color.substring(1, 7) : color.substring(1);
     }
 
     private static CTRPr getRunProperties(XWPFRun run) {
         return run.getCTR().isSetRPr() ? run.getCTR().getRPr() : run.getCTR().addNewRPr();
     }
-
 }
+
+

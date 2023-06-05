@@ -9,14 +9,16 @@ import java.util.ArrayList;
 public class PierDocument {
     XWPFDocument document;
     ArrayList<PierParagraph> paragraphs = new ArrayList<>();
-    int size = 0;
+    ArrayList<PierTable> tables = new ArrayList<>();
+    int paragraphs_count = 0;
+    int tables_count = 0;
 
     public ArrayList<PierParagraph> getParagraphs() {
         return paragraphs;
     }
 
     public PierParagraph get_last_paragraph() {
-        return getParagraphs().get(size - 1);
+        return getParagraphs().get(paragraphs_count - 1);
     }
 
     public PierDocument(String docx_path) throws IOException {
@@ -31,8 +33,15 @@ public class PierDocument {
     public PierParagraph add_paragraph() {
         PierParagraph paragraph = new PierParagraph(this);
         this.paragraphs.add(paragraph);
-        this.size += 1;
+        this.paragraphs_count += 1;
         return paragraph;
+    }
+
+    public PierTable add_table(int row, int col) {
+        PierTable table = new PierTable(this, row, col);
+        this.tables.add(table);
+        this.tables_count += 1;
+        return table;
     }
 
     public void save_docx(String docx_path) throws IOException {
