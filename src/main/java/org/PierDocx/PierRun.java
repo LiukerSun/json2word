@@ -1,6 +1,5 @@
 package org.PierDocx;
 
-import org.PierDocx.style.ParagraphStyle;
 import org.PierDocx.style.RunStyle;
 import org.PierDocx.utils.StyleUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;

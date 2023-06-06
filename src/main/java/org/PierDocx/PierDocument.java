@@ -1,6 +1,7 @@
 package org.PierDocx;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFStyles;
 
 
 import java.io.*;
@@ -42,6 +43,10 @@ public class PierDocument {
         this.tables.add(table);
         this.tables_count += 1;
         return table;
+    }
+
+    public XWPFStyles get_styles() {
+        return this.document.getStyles();
     }
 
     public void save_docx(String docx_path) throws IOException {

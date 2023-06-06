@@ -12,7 +12,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PipedReader;
 import java.util.ArrayList;
 
 import static org.PierDocx.utils.pic.get_pic_type;
@@ -35,10 +34,12 @@ public class PierParagraph {
         super();
         this.paragraph = document.document.createParagraph();
     }
+
     public PierParagraph(PierTable.PierTableCell tableCell) {
         super();
         this.paragraph = tableCell.cell.addParagraph();
     }
+
     public PierRun add_run() {
         PierRun run = new PierRun(this);
         this.runs.add(run);
@@ -46,7 +47,7 @@ public class PierParagraph {
         return run;
     }
 
-    public PierParagraph add_pic(String pic_path, int width, int height, String title,RunStyle title_style) {
+    public PierParagraph add_pic(String pic_path, int width, int height, String title, RunStyle title_style) {
         try (InputStream stream = new FileInputStream(pic_path)) {
             this.add_style(new ParagraphStyle().setAlign(ParagraphAlignment.CENTER));
             this.add_run().add_text(title).add_style(title_style);
@@ -64,6 +65,11 @@ public class PierParagraph {
 
     public PierParagraph add_style(ParagraphStyle style) {
         StyleUtils.styleParagraph(this, style);
+        return this;
+    }
+
+    public PierParagraph add_style_by_id(String style_name) {
+        this.paragraph.setStyle(style_name);
         return this;
     }
 

@@ -1,4 +1,28 @@
 {
-  "template_file": "Data/template/template.docx",
-  "result_file": "Data/result/result.docx"
+  "templateFile": "Data/template/template.docx",
+  "resultFile": "Data/result/result.docx",
+  "Styles": [
+    {
+      "styleName": " ",
+      "font": "宋体",
+      "fontSize": 22,
+      "alignmentType": "LEFT",
+      "isHeading": true,
+      "headingLvl": 1,
+      "isBold": true,
+      "isUnderLine": false,
+      "isItalic": false
+    },
+    {
+      "styleName": "rightNormal",
+      "font": "宋体",
+      "fontSize": 15,
+      "alignmentType": "RIGHT",
+      "isHeading": true,
+      "headingLvl": 1,
+      "isBold": false,
+      "isUnderLine": false,
+      "isItalic": false
+    }
+  ]
 }
