@@ -3,7 +3,7 @@
   "resultFile": "Data/result/result.docx",
   "Styles": [
     {
-      "styleName": " ",
+      "styleName": "title001",
       "font": "宋体",
       "fontSize": 22,
       "alignmentType": "LEFT",
@@ -18,7 +18,7 @@
       "font": "宋体",
       "fontSize": 15,
       "alignmentType": "RIGHT",
-      "isHeading": true,
+      "isHeading": false,
       "headingLvl": 1,
       "isBold": false,
       "isUnderLine": false,

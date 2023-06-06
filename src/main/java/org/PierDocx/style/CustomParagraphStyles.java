@@ -27,9 +27,7 @@ public class CustomParagraphStyles {
         this.fontSize = styleJson.get("fontSize").asInt();
         this.alignmentType = styleJson.get("alignmentType").asText();
         this.isHeading = styleJson.get("isHeading").asBoolean();
-        if (this.isHeading) {
-            this.headingLvl = styleJson.get("headingLvl").asInt();
-        }
+        this.headingLvl = styleJson.get("headingLvl").asInt();
         this.isBold = styleJson.get("isBold").asBoolean();
         this.isUnderLine = styleJson.get("isUnderLine").asBoolean();
         this.isItalic = styleJson.get("isItalic").asBoolean();
@@ -49,6 +47,7 @@ public class CustomParagraphStyles {
             ctStyle.setUiPriority(indentNumber);
             CTPPrGeneral ppr = CTPPrGeneral.Factory.newInstance();
             ppr.setOutlineLvl(indentNumber);
+            ctStyle.setPPr(ppr);
         }
 
         // set Font FontSize Bold UnderLine
