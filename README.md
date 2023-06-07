@@ -47,6 +47,7 @@ A way to generate word(docx), based on Apache POI.
 | add_latex            | String latex                                                | None    | Add a Latex formula into Run. |
 | add_pic              | String pic_path<br />int width<br />int height              | PierRun | Add a new Pic into Run.       |
 | add_style            | PierRun run<br />RunStyle style<br />OR<br />RunStyle style | PierRun | Set Style.                    |
+| add_page_break       | None                                                        | PierRun | Add a new Page.               |
 
 ### PierTable
 
@@ -159,7 +160,7 @@ public class Main {
     }
 }
 ```
-  
+
   ![image](https://github.com/LiukerSun/json2word/assets/32071915/88b10716-369d-4539-99f2-2107ab5b1279)
 
 
