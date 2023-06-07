@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-public class doc_latex {
+public class LatexUtils {
     static File stylesheet = new File("MML2OMML.XSL");
     static TransformerFactory tFactory = TransformerFactory.newInstance();
     static StreamSource styleSource = new StreamSource(stylesheet);

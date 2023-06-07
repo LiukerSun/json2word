@@ -1,16 +1,13 @@
 package org.PierDocx.style;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFStyle;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.math.BigInteger;
 
 public class CustomParagraphStyles {
-    XWPFDocument document;
     String styleName;
-    String fontType;
     String font;
     int fontSize;
     String alignmentType;
@@ -19,7 +16,6 @@ public class CustomParagraphStyles {
     Boolean isBold;
     Boolean isUnderLine;
     Boolean isItalic;
-
 
     public CustomParagraphStyles(JsonNode styleJson) {
         this.styleName = styleJson.get("styleName").asText();
@@ -32,7 +28,6 @@ public class CustomParagraphStyles {
         this.isUnderLine = styleJson.get("isUnderLine").asBoolean();
         this.isItalic = styleJson.get("isItalic").asBoolean();
     }
-
 
     public XWPFStyle addCustomStyle() {
         // set StyleId.
@@ -95,12 +90,6 @@ public class CustomParagraphStyles {
         XWPFStyle style = new XWPFStyle(ctStyle);
         // 这是一个段落样式。
         style.setType(STStyleType.PARAGRAPH);
-
         return style;
-
-//        XWPFStyles styles = this.document.createStyles();
-//        styles.addStyle(style);
     }
-
-
 }

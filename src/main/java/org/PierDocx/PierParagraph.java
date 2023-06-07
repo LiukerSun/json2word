@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import static org.PierDocx.utils.pic.get_pic_type;
+import static org.PierDocx.utils.PicUtils.get_pic_type;
 
 
 public class PierParagraph {
@@ -26,7 +26,7 @@ public class PierParagraph {
         return runs;
     }
 
-    public PierRun get_last_run() {
+    public PierRun getLastRun() {
         return getRuns().get(size - 1);
     }
 
@@ -35,41 +35,46 @@ public class PierParagraph {
         this.paragraph = document.document.createParagraph();
     }
 
-    public PierParagraph(PierTable.PierTableCell tableCell) {
+    public PierParagraph(PierTableCell tableCell) {
         super();
         this.paragraph = tableCell.cell.addParagraph();
     }
 
-    public PierRun add_run() {
+    public PierRun addRun() {
         PierRun run = new PierRun(this);
         this.runs.add(run);
         this.size += 1;
         return run;
     }
 
-    public PierParagraph add_pic(String pic_path, int width, int height, String title, RunStyle title_style) {
+    public PierParagraph addPic(String pic_path, int width, int height, String title, RunStyle title_style) {
         try (InputStream stream = new FileInputStream(pic_path)) {
-            this.add_style(new ParagraphStyle().setAlign(ParagraphAlignment.CENTER));
-            this.add_run().add_text(title).add_style(title_style);
-            this.add_run().run.addPicture(stream, get_pic_type(pic_path), "Generated", Units.toEMU(width), Units.toEMU(height));
+            this.addStyle(new ParagraphStyle().setAlign(ParagraphAlignment.CENTER));
+            this.addRun().addText(title).addStyle(title_style);
+            this.addRun().run.addPicture(stream, get_pic_type(pic_path), "Generated", Units.toEMU(width), Units.toEMU(height));
             return this;
         } catch (IOException | InvalidFormatException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public PierParagraph add_style(PierParagraph paragraph, ParagraphStyle style) {
+    public PierParagraph addStyle(PierParagraph paragraph, ParagraphStyle style) {
         StyleUtils.styleParagraph(paragraph, style);
         return paragraph;
     }
 
-    public PierParagraph add_style(ParagraphStyle style) {
+    public PierParagraph addStyle(ParagraphStyle style) {
         StyleUtils.styleParagraph(this, style);
         return this;
     }
 
-    public PierParagraph add_style_by_id(String style_name) {
-        this.paragraph.setStyle(style_name);
+    public PierParagraph addStyleById(String style_name) {
+        this.addStyle(new ParagraphStyle().setStyleId(style_name));
+        return this;
+    }
+
+    public PierParagraph addPageBreakBefore(){
+        this.addStyle(new ParagraphStyle().setPageBreakBefore(true));
         return this;
     }
 

@@ -33,7 +33,7 @@ public enum XWPFHighlightColor {
 
     private final int value;
 
-    private XWPFHighlightColor(int val) {
+    XWPFHighlightColor(int val) {
         value = val;
     }
 

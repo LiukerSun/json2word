@@ -16,8 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.PierDocx.utils.doc_latex._getOMML;
-import static org.PierDocx.utils.pic.get_pic_type;
+import static org.PierDocx.utils.LatexUtils._getOMML;
+import static org.PierDocx.utils.PicUtils.get_pic_type;
 
 public class PierRun {
     public XWPFRun run;
@@ -29,18 +29,17 @@ public class PierRun {
         this.run = paragraph.paragraph.createRun();
     }
 
-    public PierRun add_text(String text) {
+    public PierRun addText(String text) {
         this.run.setText(text);
         return this;
     }
 
-    public PierRun add_return() {
+    public PierRun addReturn() {
         this.run.addCarriageReturn();
         return this;
     }
 
-
-    public void add_latex(String latex) throws Exception {
+    public void addLatex(String latex) throws Exception {
         SnuggleEngine engine = new SnuggleEngine();
         SnuggleSession session = engine.createSession();
         SnuggleInput input = new SnuggleInput(latex);
@@ -52,7 +51,7 @@ public class PierRun {
         //        return this;
     }
 
-    public PierRun add_pic(String pic_path,int width,int height) {
+    public PierRun addPic(String pic_path, int width, int height) {
         try (InputStream stream = new FileInputStream(pic_path)) {
             this.run.addPicture(stream, get_pic_type(pic_path), "Generated", Units.toEMU(width), Units.toEMU(height));
             return this;
@@ -61,18 +60,17 @@ public class PierRun {
         }
     }
 
-
-    public PierRun add_page_break() {
+    public PierRun addPageBreak() {
         this.run.addBreak(BreakType.PAGE);
         return this;
     }
 
-    public PierRun add_style(PierRun run, RunStyle style) {
+    public PierRun addStyle(PierRun run, RunStyle style) {
         StyleUtils.styleRun(run, style);
         return this;
     }
 
-    public PierRun add_style(RunStyle style) {
+    public PierRun addStyle(RunStyle style) {
         StyleUtils.styleRun(this, style);
         return this;
     }

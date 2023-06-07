@@ -4,14 +4,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import org.PierDocx.PierParagraph;
-import org.PierDocx.PierRun;
+import org.PierDocx.*;
 import org.PierDocx.style.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.xwpf.usermodel.LineSpacingRule;
-import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
+import org.apache.poi.xwpf.usermodel.*;
 
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.xmlbeans.SimpleValue;
 import org.openxmlformats.schemas.officeDocument.x2006.sharedTypes.STHexColorRGB;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
@@ -264,6 +261,134 @@ public final class StyleUtils {
             run.run.setVerticalAlignment(vertAlign);
         }
     }
+
+    public static void styleTable(PierTable table, TableStyle tableStyle) {
+        BorderStyle bottomBorder = tableStyle.getBottomBorder();
+        BorderStyle leftBorder = tableStyle.getLeftBorder();
+        BorderStyle rightBorder = tableStyle.getRightBorder();
+        BorderStyle topBorder = tableStyle.getTopBorder();
+        BorderStyle insideHBorder = tableStyle.getInsideHBorder();
+        BorderStyle insideVBorder = tableStyle.getInsideVBorder();
+        if (null == table || null == tableStyle) return;
+        if (null != bottomBorder) {
+            table.table.setBottomBorder(
+                    bottomBorder.getType(),
+                    bottomBorder.getSize(),
+                    bottomBorder.getSpace(),
+                    bottomBorder.getColor()
+            );
+        }
+        if (null != leftBorder) {
+            table.table.setLeftBorder(
+                    leftBorder.getType(),
+                    leftBorder.getSize(),
+                    leftBorder.getSpace(),
+                    leftBorder.getColor()
+            );
+        }
+        if (null != rightBorder) {
+            table.table.setRightBorder(
+                    rightBorder.getType(),
+                    rightBorder.getSize(),
+                    rightBorder.getSpace(),
+                    rightBorder.getColor()
+            );
+        }
+        if (null != topBorder) {
+            table.table.setTopBorder(
+                    topBorder.getType(),
+                    topBorder.getSize(),
+                    topBorder.getSpace(),
+                    topBorder.getColor()
+            );
+        }
+        if (null != insideHBorder) {
+            table.table.setInsideHBorder(
+                    insideHBorder.getType(),
+                    insideHBorder.getSize(),
+                    insideHBorder.getSpace(),
+                    insideHBorder.getColor()
+            );
+        }
+        if (null != insideVBorder) {
+            table.table.setInsideVBorder(
+                    insideVBorder.getType(),
+                    insideVBorder.getSize(),
+                    insideVBorder.getSpace(),
+                    insideVBorder.getColor()
+            );
+        }
+
+        if (null != tableStyle.getAlign()) {
+            table.table.setTableAlignment(tableStyle.getAlign());
+        }
+        table.table.setCellMargins(tableStyle.getTopCellMargin(), tableStyle.getLeftCellMargin(),
+                tableStyle.getBottomCellMargin(), tableStyle.getRightCellMargin());
+        if (null != tableStyle.getIndentation()) {
+            CTTbl ctTbl = table.table.getCTTbl();
+            CTTblPr tPr = (ctTbl.getTblPr() != null) ? ctTbl.getTblPr() : ctTbl.addNewTblPr();
+            CTTblWidth tw = tPr.isSetTblInd() ? tPr.getTblInd() : tPr.addNewTblInd();
+            tw.setType(STTblWidth.DXA);
+            tw.setW(BigInteger.valueOf(UnitUtils.cm2Twips(tableStyle.getIndentation())));
+        }
+    }
+
+    public static void styleTableRow(PierTableRow row, RowStyle rowStyle) {
+        if (null == row || null == rowStyle) return;
+        int height = rowStyle.getHeight();
+        CTRow ctRow = row.row.getCtRow();
+        CTTrPr properties = (ctRow.isSetTrPr()) ? ctRow.getTrPr() : ctRow.addNewTrPr();
+        if (0 != height) {
+            row.row.setHeight(height);
+            CTHeight h = properties.sizeOfTrHeightArray() == 0 ? properties.addNewTrHeight()
+                    : properties.getTrHeightArray(0);
+            String heightRule = rowStyle.getHeightRule();
+            if ("exact".equals(heightRule))
+                h.setHRule(STHeightRule.EXACT);
+            else if ("atleast".equals(heightRule))
+                h.setHRule(STHeightRule.AT_LEAST);
+            else
+                h.setHRule(STHeightRule.AUTO);
+        }
+
+        boolean repeated = rowStyle.isRepeated();
+        if (repeated) {
+            CTOnOff tblHeader = properties.sizeOfTblHeaderArray() == 0 ? properties.addNewTblHeader()
+                    : properties.getTblHeaderArray(0);
+            tblHeader.setVal(XWPFOnOff.ON);
+        }
+
+        boolean breakAcrossPage = rowStyle.isBreakAcrossPage();
+        if (!breakAcrossPage) {
+            if (properties.sizeOfCantSplitArray() == 0) {
+                properties.addNewCantSplit();
+            } else {
+                properties.getCantSplitArray(0).setVal(XWPFOnOff.ON);
+            }
+        }
+    }
+
+    public static void styleTableCell(PierTableCell cell, CellStyle cellStyle) {
+        if (null == cell || null == cellStyle) return;
+        if (null != cellStyle.getVertAlign()) {
+            cell.setVerticalAlignment(cellStyle.getVertAlign());
+        }
+        if (null != cellStyle.getBackgroundColor()) {
+            CTTc ctTc = cell.cell.getCTTc();
+            CTTcPr pr = ctTc.isSetTcPr() ? ctTc.getTcPr() : ctTc.addNewTcPr();
+            CTShd shd = pr.isSetShd() ? pr.getShd() : pr.addNewShd();
+            XWPFShadingPattern shadingPattern = cellStyle.getShadingPattern();
+            if (null == shadingPattern) {
+                shd.setVal(STShd.CLEAR);
+            } else {
+                shd.setVal(STShd.Enum.forInt(shadingPattern.getValue()));
+            }
+            shd.setColor("auto");
+            shd.setFill(cellStyle.getBackgroundColor());
+        }
+    }
+
+
 
     private static CTRPr getRunProperties(XWPFRun run) {
         return run.getCTR().isSetRPr() ? run.getCTR().getRPr() : run.getCTR().addNewRPr();

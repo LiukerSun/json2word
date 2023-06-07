@@ -56,7 +56,7 @@ public enum XWPFShadingPattern {
 
     private final int value;
 
-    private XWPFShadingPattern(int val) {
+    XWPFShadingPattern(int val) {
         value = val;
     }
 

@@ -1,6 +1,6 @@
 package org.PierDocx.utils;
 
-public class pic {
+public class PicUtils {
     public static int get_pic_type(String pic_path) {
         String[] tmp = pic_path.split("\\.");
         String pic_type = tmp[tmp.length - 1].toUpperCase();

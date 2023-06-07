@@ -3,13 +3,9 @@ package org.PierDocx.style;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.VerticalAlign;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 public class RunStyle implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
     private Boolean bold;
     private Boolean Capitalized;
     private int CharacterSpacing;// 字符间距

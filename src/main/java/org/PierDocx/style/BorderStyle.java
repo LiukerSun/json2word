@@ -1,18 +1,14 @@
 package org.PierDocx.style;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 import org.apache.poi.xwpf.usermodel.XWPFTable.XWPFBorderType;
 
 public class BorderStyle implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
     private int size;
     private String color;
     private XWPFBorderType type;
     private int space = 0;
-    private Style defaultTextStyle;
 
     public String getColor() {
         return color;
@@ -46,11 +42,11 @@ public class BorderStyle implements Serializable {
         this.space = space;
     }
 
-    public void setDefaultBorderStyle() {
+    public BorderStyle setDefaultBorderStyle() {
         this.setSize(8 * 1 / 2);
         this.setColor("auto");
         this.setType(XWPFBorderType.SINGLE);
-
+        return this;
     }
 
 }

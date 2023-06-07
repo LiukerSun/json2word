@@ -1,14 +1,11 @@
 package org.PierDocx.style;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 import org.apache.poi.xwpf.usermodel.LineSpacingRule;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 
 public class ParagraphStyle implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
     private String styleId;
     private ParagraphAlignment align; // 对齐
     private Double indentLeftChars; // 缩进-左侧
@@ -35,12 +32,6 @@ public class ParagraphStyle implements Serializable {
     private Style glyphStyle;
     private Long numId;
     private Long lvl;
-    private Style defaultTextStyle;
-
-    public ParagraphStyle setDefaultTextStyle(Style defaultTextStyle) {
-        this.defaultTextStyle = defaultTextStyle;
-        return this;
-    }
 
     public ParagraphStyle setStyleId(String styleId) {
         this.styleId = styleId;
@@ -276,10 +267,6 @@ public class ParagraphStyle implements Serializable {
 
     public Long getLvl() {
         return lvl;
-    }
-
-    public Style getDefaultTextStyle() {
-        return defaultTextStyle;
     }
 
 
