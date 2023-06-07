@@ -14,6 +14,7 @@ public class Main {
     public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+        logger.info("Start");
         // load config from Json File.
         JsonNode configJson = loadJson("Data/config.json");
         // get tempFilePath and resultFilePath.
