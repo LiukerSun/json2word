@@ -172,8 +172,6 @@ public class Main {
 
 ```
 
-  ![image](https://github.com/LiukerSun/json2word/assets/32071915/88b10716-369d-4539-99f2-2107ab5b1279)
-
 
 ## TODO
 
