@@ -1,6 +1,7 @@
 package org.PierDocx;
 
 import org.PierDocx.style.TableStyle;
+import org.PierDocx.utils.Preconditions;
 import org.PierDocx.utils.StyleUtils;
 import org.PierDocx.utils.TableTools;
 import org.apache.poi.xwpf.usermodel.TableWidthType;
@@ -10,6 +11,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import java.util.ArrayList;
 
 import static org.PierDocx.utils.TableTools.*;
+import static org.test.Main.logger;
 
 
 public class PierTable {
@@ -36,18 +38,53 @@ public class PierTable {
         return this;
     }
 
-    public PierTable addAllBorder(){
+    public PierTable addAllBorder() {
         TableTools.setAllBorder(this);
         return this;
     }
 
-    public void mergeCellsHorizontal(Integer row, Integer fromCell, Integer toCell) {
+    private void mergeCellsHorizontal(int row, int fromCell, int toCell) {
         TableTools.mergeCellsHorizonal(this, row, fromCell, toCell);
     }
 
-    public void mergeCellsVertically(Integer col, Integer fromRow, Integer toRow) {
+    private void mergeCellsVertically(int col, int fromRow, int toRow) {
         TableTools.mergeCellsVertically(this, col, fromRow, toRow);
     }
+
+    public void mergeCell(int firstRow, int firstColumn, int lastRow, int lastColumn) {
+        Preconditions.requireDiffCell(firstRow, firstColumn, lastRow, lastColumn, "Need Different Cells!");
+        Preconditions.requireBiggerThan(lastColumn, firstColumn, "lastColumn need bigger than firstColumn!");
+        Preconditions.requireBiggerThan(lastRow, firstRow, "lastRow need bigger than firstRow!");
+
+        String _mergeType = "Both";
+        if (firstColumn == lastColumn) {
+            _mergeType = "ColOnly";
+        }
+        if (firstRow == lastRow) {
+            _mergeType = "RowOnly";
+        }
+
+        switch (_mergeType) {
+            case "Both" -> {
+                for (int row = firstRow; row <= lastRow; row++) {
+                    this.mergeCellsHorizontal(row, firstColumn, lastColumn);
+                }
+                this.mergeCellsVertically(firstColumn,firstRow,lastRow);
+            }
+            case "RowOnly" -> {
+                this.mergeCellsHorizontal(firstRow, firstColumn, lastColumn);
+
+            }
+            case "ColOnly" -> {
+                this.mergeCellsVertically(firstColumn, firstRow, lastRow);
+
+            }
+
+        }
+
+
+    }
+
 
     public ArrayList<PierTableRow> getRows() {
         // 防止重复添加。先清空。
@@ -64,11 +101,11 @@ public class PierTable {
         return this.rows_list.get(row_index);
     }
 
-    public int getRowsSize() {
+    private int getRowsSize() {
         return obtainRowSize(this);
     }
 
-    public int getColsSize() {
+    private int getColsSize() {
         return obtainColumnSize(this);
     }
 

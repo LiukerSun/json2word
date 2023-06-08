@@ -26,9 +26,15 @@ public class PierTableCell {
         return this;
     }
 
-    public PierTableCell setText(String text) {
+    public PierParagraph setText(String text) {
+        // 每次执行setText 都会重置表格的段落数。
         this.cell.setText(text);
-        return this;
+
+        this.paragraphs = new ArrayList<>();
+        PierParagraph paragraph = new PierParagraph(this);
+        this.paragraphs.add(paragraph);
+        this.paragraphs_count = 1;
+        return paragraph;
     }
 
     public PierTableCell setWidth(String width) {
@@ -41,11 +47,22 @@ public class PierTableCell {
     }
 
     public PierParagraph addParagraph() {
-        PierParagraph paragraph = new PierParagraph(this);
+        PierParagraph paragraph = new PierParagraph(this.cell.getCTTc().addNewP(), this.cell);
         this.paragraphs.add(paragraph);
         this.paragraphs_count += 1;
         return paragraph;
     }
 
+    public PierParagraph getLastParagraph() {
+        if (paragraphs_count == 0) {
+            return new PierParagraph(this);
+        } else {
+            return this.paragraphs.get(paragraphs_count - 1);
+        }
+    }
+
+    public PierParagraph getParagraph(int paragraphsIndex) {
+        return this.paragraphs.get(paragraphsIndex);
+    }
 
 }

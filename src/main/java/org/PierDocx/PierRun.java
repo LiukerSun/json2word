@@ -5,6 +5,8 @@ import org.PierDocx.utils.StyleUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.BreakType;
+import org.apache.poi.xwpf.usermodel.IBody;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.openxmlformats.schemas.officeDocument.x2006.math.CTOMath;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
@@ -24,10 +26,14 @@ public class PierRun {
     PierParagraph paragraph;
 
     public PierRun(PierParagraph paragraph) {
-        super();
         this.paragraph = paragraph;
         this.run = paragraph.paragraph.createRun();
     }
+    public PierRun(PierParagraph paragraph,XWPFRun _run) {
+        this.paragraph = paragraph;
+        this.run = _run;
+    }
+
 
     public PierRun addText(String text) {
         this.run.setText(text);

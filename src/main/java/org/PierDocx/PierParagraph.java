@@ -5,8 +5,7 @@ import org.PierDocx.style.RunStyle;
 import org.PierDocx.utils.StyleUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 
 import java.io.FileInputStream;
@@ -23,21 +22,38 @@ public class PierParagraph {
     int size;
 
     public ArrayList<PierRun> getRuns() {
-        return runs;
+        this.runs = new ArrayList<>();
+        if (!this.paragraph.getRuns().isEmpty()){
+            for (XWPFRun _run : this.paragraph.getRuns())
+            {
+                this.runs.add(new PierRun(this,_run));
+            }
+        }
+        this.size = this.runs.size();
+        return this.runs;
     }
 
     public PierRun getLastRun() {
-        return getRuns().get(size - 1);
+        this.getRuns();
+        if (this.size == 0) {
+            return this.addRun();
+        }
+        else {
+            return getRuns().get(size - 1);
+        }
+
     }
 
     public PierParagraph(PierDocument document) {
-        super();
         this.paragraph = document.document.createParagraph();
     }
 
     public PierParagraph(PierTableCell tableCell) {
-        super();
-        this.paragraph = tableCell.cell.addParagraph();
+        this.paragraph = tableCell.cell.getParagraphArray(tableCell.cell.getParagraphs().size() - 1);
+    }
+
+    public PierParagraph(CTP prgrph, IBody part) {
+        this.paragraph = new XWPFParagraph(prgrph, part);
     }
 
     public PierRun addRun() {
@@ -73,7 +89,7 @@ public class PierParagraph {
         return this;
     }
 
-    public PierParagraph addPageBreakBefore(){
+    public PierParagraph addPageBreakBefore() {
         this.addStyle(new ParagraphStyle().setPageBreakBefore(true));
         return this;
     }
