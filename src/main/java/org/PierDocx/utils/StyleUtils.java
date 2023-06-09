@@ -87,7 +87,7 @@ public final class StyleUtils {
 
     public static void styleParaRpr(PierParagraph paragraph, Style style) {
         if (null == paragraph || null == style) return;
-        CTP ctp = paragraph.paragraph.getCTP();
+        CTP ctp = paragraph.getParagraph().getCTP();
         CTPPr pPr = ctp.isSetPPr() ? ctp.getPPr() : ctp.addNewPPr();
         CTParaRPr pr = pPr.isSetRPr() ? pPr.getRPr() : pPr.addNewRPr();
         StyleUtils.styleParaRpr(pr, style);
@@ -96,29 +96,29 @@ public final class StyleUtils {
     public static void stylePpr(PierParagraph paragraph, ParagraphStyle style) {
         if (null == paragraph || null == style) return;
         if (null != style.getAlign()) {
-            paragraph.paragraph.setAlignment(style.getAlign());
+            paragraph.getParagraph().setAlignment(style.getAlign());
         }
 
         if (null != style.getSpacing()) {
-            paragraph.paragraph.setSpacingBetween(style.getSpacing(),
+            paragraph.getParagraph().setSpacingBetween(style.getSpacing(),
                     null == style.getSpacingRule() ? LineSpacingRule.AUTO : style.getSpacingRule());
         }
         if (null != style.getSpacingBeforeLines()) {
-            paragraph.paragraph.setSpacingBeforeLines(
+            paragraph.getParagraph().setSpacingBeforeLines(
                     new BigInteger(String.valueOf(Math.round(style.getSpacingBeforeLines() * 100.0))).intValue());
         }
         if (null != style.getSpacingAfterLines()) {
-            paragraph.paragraph.setSpacingAfterLines(
+            paragraph.getParagraph().setSpacingAfterLines(
                     new BigInteger(String.valueOf(Math.round(style.getSpacingAfterLines() * 100.0))).intValue());
         }
         if (null != style.getSpacingBefore()) {
-            paragraph.paragraph.setSpacingBefore(UnitUtils.point2Twips(style.getSpacingBefore()));
+            paragraph.getParagraph().setSpacingBefore(UnitUtils.point2Twips(style.getSpacingBefore()));
         }
         if (null != style.getSpacingAfter()) {
-            paragraph.paragraph.setSpacingAfter(UnitUtils.point2Twips(style.getSpacingAfter()));
+            paragraph.getParagraph().setSpacingAfter(UnitUtils.point2Twips(style.getSpacingAfter()));
         }
 
-        CTP ctp = paragraph.paragraph.getCTP();
+        CTP ctp = paragraph.getParagraph().getCTP();
         CTPPr pr = ctp.isSetPPr() ? ctp.getPPr() : ctp.addNewPPr();
         CTInd indent = pr.isSetInd() ? pr.getInd() : pr.addNewInd();
         if (null != style.getIndentLeftChars()) {
@@ -169,7 +169,7 @@ public final class StyleUtils {
         }
 
         if (null != style.getStyleId()) {
-            paragraph.paragraph.setStyle(style.getStyleId());
+            paragraph.getParagraph().setStyle(style.getStyleId());
         }
 
         if (null != style.getKeepLines()) {
@@ -177,10 +177,10 @@ public final class StyleUtils {
             ctKeepLines.setVal(style.getKeepLines() ? XWPFOnOff.ON : XWPFOnOff.OFF);
         }
         if (null != style.getKeepNext()) {
-            paragraph.paragraph.setKeepNext(style.getKeepNext());
+            paragraph.getParagraph().setKeepNext(style.getKeepNext());
         }
         if (null != style.getPageBreakBefore()) {
-            paragraph.paragraph.setPageBreak(style.getPageBreakBefore());
+            paragraph.getParagraph().setPageBreak(style.getPageBreakBefore());
         }
         if (null != style.getWidowControl()) {
             CTOnOff ctWC = pr.isSetWidowControl() ? pr.getWidowControl() : pr.addNewWidowControl();
@@ -193,10 +193,10 @@ public final class StyleUtils {
         }
 
         if (null != style.getNumId()) {
-            paragraph.paragraph.setNumID(BigInteger.valueOf(style.getNumId()));
+            paragraph.getParagraph().setNumID(BigInteger.valueOf(style.getNumId()));
         }
         if (null != style.getLvl()) {
-            paragraph.paragraph.setNumILvl(BigInteger.valueOf(style.getLvl()));
+            paragraph.getParagraph().setNumILvl(BigInteger.valueOf(style.getLvl()));
         }
     }
 
@@ -387,8 +387,6 @@ public final class StyleUtils {
             shd.setFill(cellStyle.getBackgroundColor());
         }
     }
-
-
 
     private static CTRPr getRunProperties(XWPFRun run) {
         return run.getCTR().isSetRPr() ? run.getCTR().getRPr() : run.getCTR().addNewRPr();

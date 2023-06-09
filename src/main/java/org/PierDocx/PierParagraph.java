@@ -6,7 +6,7 @@ import org.PierDocx.utils.StyleUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,16 +17,17 @@ import static org.PierDocx.utils.PicUtils.get_pic_type;
 
 
 public class PierParagraph {
-    public XWPFParagraph paragraph;
+    private XWPFParagraph paragraph;
     ArrayList<PierRun> runs = new ArrayList<>();
     int size;
+    private Boolean isTOC = false;
+    private ParagraphStyle style;
 
     public ArrayList<PierRun> getRuns() {
         this.runs = new ArrayList<>();
-        if (!this.paragraph.getRuns().isEmpty()){
-            for (XWPFRun _run : this.paragraph.getRuns())
-            {
-                this.runs.add(new PierRun(this,_run));
+        if (!this.paragraph.getRuns().isEmpty()) {
+            for (XWPFRun _run : this.paragraph.getRuns()) {
+                this.runs.add(new PierRun(this, _run));
             }
         }
         this.size = this.runs.size();
@@ -37,11 +38,26 @@ public class PierParagraph {
         this.getRuns();
         if (this.size == 0) {
             return this.addRun();
-        }
-        else {
+        } else {
             return getRuns().get(size - 1);
         }
 
+    }
+
+    public ParagraphStyle getStyle() {
+        return style;
+    }
+
+    public String getStyleID() {
+        if (style == null) {
+            return "";
+        } else {
+            return style.getStyleId();
+        }
+    }
+
+    public XWPFParagraph getParagraph() {
+        return paragraph;
     }
 
     public PierParagraph(PierDocument document) {
@@ -74,13 +90,17 @@ public class PierParagraph {
         }
     }
 
+
+    // style functions
     public PierParagraph addStyle(PierParagraph paragraph, ParagraphStyle style) {
         StyleUtils.styleParagraph(paragraph, style);
+        this.style = style;
         return paragraph;
     }
 
     public PierParagraph addStyle(ParagraphStyle style) {
         StyleUtils.styleParagraph(this, style);
+        this.style = style;
         return this;
     }
 
@@ -98,5 +118,11 @@ public class PierParagraph {
         return this.paragraph.getCTP();
     }
 
+    public Boolean getTOC() {
+        return isTOC;
+    }
 
+    public void setTOC(Boolean TOC) {
+        isTOC = TOC;
+    }
 }

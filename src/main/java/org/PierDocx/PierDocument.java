@@ -4,10 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.PierDocx.style.CustomParagraphStyles;
 import org.PierDocx.style.ParagraphStyle;
+import org.PierDocx.utils.TOCUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFStyles;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 
 import java.io.*;
@@ -21,6 +22,11 @@ public class PierDocument {
     ArrayList<PierTable> tables = new ArrayList<>();
     int paragraphs_count = 0;
     int tables_count = 0;
+    private CTSdtBlock Sdt;
+
+    public CTSdtBlock getSdt() {
+        return Sdt;
+    }
 
     public PierDocument(String docx_path) throws IOException {
         InputStream is = new FileInputStream(docx_path);
@@ -55,6 +61,14 @@ public class PierDocument {
         }
     }
 
+    public void markTOC() {
+        this.Sdt = this.document.getDocument().getBody().addNewSdt();
+    }
+
+    public void addTOC() {
+        TOCUtils.addTOC(this);
+    }
+
     public PierParagraph addParagraph() {
         PierParagraph paragraph = new PierParagraph(this);
         this.paragraphs.add(paragraph);
@@ -69,7 +83,7 @@ public class PierDocument {
         return table;
     }
 
-    public PierTable addTable(JsonNode tableJson){
+    public PierTable addTable(JsonNode tableJson) {
         this.addParagraph();
         int tableColSize = tableJson.get("col").asInt();
         int tableRowSize = tableJson.get("row").asInt();

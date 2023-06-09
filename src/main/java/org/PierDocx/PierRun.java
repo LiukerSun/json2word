@@ -27,7 +27,7 @@ public class PierRun {
 
     public PierRun(PierParagraph paragraph) {
         this.paragraph = paragraph;
-        this.run = paragraph.paragraph.createRun();
+        this.run = paragraph.getParagraph().createRun();
     }
     public PierRun(PierParagraph paragraph,XWPFRun _run) {
         this.paragraph = paragraph;
