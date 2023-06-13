@@ -1,5 +1,6 @@
 package org.PierDocx;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.PierDocx.style.TableStyle;
 import org.PierDocx.utils.Preconditions;
 import org.PierDocx.utils.StyleUtils;
@@ -69,7 +70,7 @@ public class PierTable {
                 for (int row = firstRow; row <= lastRow; row++) {
                     this.mergeCellsHorizontal(row, firstColumn, lastColumn);
                 }
-                this.mergeCellsVertically(firstColumn,firstRow,lastRow);
+                this.mergeCellsVertically(firstColumn, firstRow, lastRow);
             }
             case "RowOnly" -> {
                 this.mergeCellsHorizontal(firstRow, firstColumn, lastColumn);

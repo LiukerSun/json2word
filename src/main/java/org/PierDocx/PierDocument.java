@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.PierDocx.style.CustomParagraphStyles;
 import org.PierDocx.style.ParagraphStyle;
+import org.PierDocx.style.RunStyle;
 import org.PierDocx.utils.TOCUtils;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFStyles;
+import org.apache.poi.sl.usermodel.VerticalAlignment;
+import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 
@@ -84,11 +84,12 @@ public class PierDocument {
     }
 
     public PierTable addTable(JsonNode tableJson) {
+
         this.addParagraph();
         int tableColSize = tableJson.get("col").asInt();
         int tableRowSize = tableJson.get("row").asInt();
         PierTable table = this.addTable(tableRowSize, tableColSize);
-        ArrayNode mergeCellsArray = (ArrayNode) tableJson.get("mergeCells");
+        ArrayNode mergeCellsArray = (ArrayNode) tableJson.get("mergeRules");
         for (JsonNode mergeRule : mergeCellsArray) {
             int firstRow = mergeRule.get("firstRow").asInt();
             int firstColumn = mergeRule.get("firstColumn").asInt();
@@ -96,15 +97,22 @@ public class PierDocument {
             int lastColumn = mergeRule.get("lastColumn").asInt();
             table.mergeCell(firstRow, firstColumn, lastRow, lastColumn);
         }
-
         ArrayNode tableData = (ArrayNode) tableJson.get("data");
         int tableDataSize = tableData.size();
         for (int i = 0; i < tableDataSize; i++) {
             ArrayNode rowArray = (ArrayNode) tableData.get(i);
             for (int colIndex = 0; colIndex < rowArray.size(); colIndex++) {
+                // 判定單元格内是否為公式。
+                String data = rowArray.get(colIndex).asText();
+                if (data.equals("$") || data.equals("%")){
+                    //TODO:这里写图片和公式的逻辑。
+                }
+
+
                 PierTableCell tableCell = table.getRow(i).getCell(colIndex);
-                tableCell.setText(rowArray.get(colIndex).asText()).addStyle(
-                        new ParagraphStyle().setAlign(ParagraphAlignment.CENTER));
+                tableCell.cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                tableCell.cell.setText(rowArray.get(colIndex).asText());
+                tableCell.cell.getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
             }
         }
         return table;

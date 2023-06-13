@@ -27,7 +27,6 @@ public class LatexUtils {
         transformer.transform(source, result);
         String ooML = stringwriter.toString();
         stringwriter.close();
-
         CTOMathPara ctOMathPara = CTOMathPara.Factory.parse(ooML);
         CTOMath ctOMath = ctOMathPara.getOMathArray(0);
         XmlCursor xmlcursor = ctOMath.newCursor();

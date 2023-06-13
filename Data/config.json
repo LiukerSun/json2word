@@ -36,11 +36,11 @@
       "isItalic": false
     }
   ],
-  "table": [
-    {
+  "tables": {
+    "test1": {
       "col": 3,
       "row": 6,
-      "mergeCells": [
+      "mergeRules": [
         {
           "firstRow": 0,
           "firstColumn": 0,
@@ -85,10 +85,10 @@
         ]
       ]
     },
-    {
+    "test2": {
       "col": 3,
       "row": 8,
-      "mergeCells": [
+      "mergeRules": [
         {
           "firstRow": 0,
           "firstColumn": 0,
@@ -143,5 +143,5 @@
         ]
       ]
     }
-  ]
+  }
 }
