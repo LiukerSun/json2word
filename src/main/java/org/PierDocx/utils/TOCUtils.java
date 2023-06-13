@@ -3,8 +3,21 @@ package org.PierDocx.utils;
 import org.PierDocx.PierDocument;
 import org.PierDocx.PierParagraph;
 import org.apache.xmlbeans.impl.xb.xmlschema.SpaceAttribute;
+import org.docx4j.jaxb.Context;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.toc.TocException;
+import org.docx4j.toc.TocGenerator;
+import org.docx4j.wml.*;
+import org.docx4j.wml.STBrType;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSdtDocPart;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTabStop;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTabJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTabTlc;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 
@@ -306,4 +319,55 @@ public class TOCUtils {
         CTRPr rPr = r.addNewRPr();
         r.addNewFldChar().setFldCharType(STFldCharType.Enum.forString("end"));
     }
+
+    public static HpsMeasure addVal(int i) {
+        HpsMeasure tmp = new HpsMeasure();
+        tmp.setVal(BigInteger.valueOf(i));
+        return tmp;
+    }
+
+    public TocGenerator addToc(WordprocessingMLPackage wordMLPackage) throws Docx4JException {
+        TocGenerator tocGenerator = new TocGenerator(wordMLPackage);
+        ObjectFactory factory = Context.getWmlObjectFactory();
+        P p = factory.createP();
+        R r = factory.createR();
+        PPr pPr = new PPr();
+        Jc jc = new Jc();
+        jc.setVal(JcEnumeration.CENTER);
+        pPr.setJc(jc);
+
+        RPr rPr = new RPr();
+        rPr.setB(new BooleanDefaultTrue());
+        RFonts rFonts = new RFonts();
+        rFonts.setAscii("宋体");
+        rFonts.setEastAsia("宋体");
+        rFonts.setHAnsi("宋体");
+        rFonts.setCs("宋体");
+        rPr.setRFonts(rFonts);
+        rPr.setSz(addVal(22 * 2));
+        rPr.setSzCs(addVal(22 * 2));
+        String[] textArr = "目录".split("<br>");
+        for (String t : textArr) {
+            Text text = factory.createText();
+            text.setValue(t);
+            r.getContent().add(text);
+            Br br = factory.createBr();
+            br.setType(STBrType.TEXT_WRAPPING);
+            r.getContent().add(br);
+        }
+        r.getContent().remove(r.getContent().size() - 1);
+        p.getContent().add(r);
+        p.setPPr(pPr);
+        r.setRPr(rPr);
+        SdtBlock sdtBlock = tocGenerator.generateToc(wordMLPackage.getMainDocumentPart().getContent().size(),
+                " TOC \\o \"1-3\" \\h \\u ", true);
+        sdtBlock.getSdtContent().getContent().set(0, p);
+        return tocGenerator;
+    }
+
+    public void updateToc(TocGenerator tocGenerator) throws TocException {
+        tocGenerator.updateToc(true);
+
+    }
+
 }
