@@ -55,7 +55,7 @@ public final class TableTools {
             if (rowIndex == fromRow) {
                 // The first merged cell is set with RESTART merge value
                 vMerge.setVal(STMerge.RESTART);
-            } else {
+            } else if (rowIndex < toRow) {
                 // Cells which join (merge) the first one, are set with CONTINUE
                 vMerge.setVal(STMerge.CONTINUE);
             }
@@ -145,7 +145,7 @@ public final class TableTools {
         tableStyle.setBottomBorder(new BorderStyle().setDefaultBorderStyle());
         tableStyle.setInsideHBorder(new BorderStyle().setDefaultBorderStyle());
         tableStyle.setInsideVBorder(new BorderStyle().setDefaultBorderStyle());
-        styleTable(table,tableStyle);
+        styleTable(table, tableStyle);
     }
 
     @Deprecated

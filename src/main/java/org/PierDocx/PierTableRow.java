@@ -28,6 +28,11 @@ public class PierTableRow {
 
 
     public ArrayList<PierTableCell> getCells() {
+        this.updateCells();
+        return this.cells;
+    }
+
+    public void updateCells(){
         // 防止重复添加。先清空。
         if (this.cells != null) {
             this.cells.clear();
@@ -35,9 +40,7 @@ public class PierTableRow {
         for (XWPFTableCell cell : this.row.getTableCells()) {
             this.cells.add(new PierTableCell(cell));
         }
-        return this.cells;
     }
-
 
 
     public PierTableCell getCell(int cell_index) {

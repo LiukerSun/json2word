@@ -1,36 +1,25 @@
 {
-  "templateFile": "Data/template/template.docx",
-  "resultFile": "Data/result/result.docx",
+  "templateFile": "template.docx",
+  "resultFile": "result.docx",
   "Styles": [
     {
-      "styleName": "centerTitle",
-      "font": "宋体",
-      "fontSize": 22,
+      "styleName": "tableTitle",
+      "font": "黑体",
+      "fontSize": 10,
       "alignmentType": "CENTER",
       "isHeading": false,
-      "headingLvl": 1,
-      "isBold": true,
+      "headingLvl": 2,
+      "isBold": false,
       "isUnderLine": false,
       "isItalic": false
     },
     {
       "styleName": "title1",
       "font": "宋体",
-      "fontSize": 22,
-      "alignmentType": "LEFT",
-      "isHeading": true,
-      "headingLvl": 1,
-      "isBold": true,
-      "isUnderLine": false,
-      "isItalic": false
-    },
-    {
-      "styleName": "title2",
-      "font": "宋体",
       "fontSize": 18,
       "alignmentType": "LEFT",
       "isHeading": true,
-      "headingLvl": 2,
+      "headingLvl": 1,
       "isBold": true,
       "isUnderLine": false,
       "isItalic": false
@@ -38,54 +27,70 @@
   ],
   "tables": {
     "test1": {
-      "col": 3,
-      "row": 6,
+      "title": "table_test",
+      "col": 12,
+      "row": 18,
       "mergeRules": [
         {
           "firstRow": 0,
           "firstColumn": 0,
-          "lastRow": 0,
-          "lastColumn": 2
+          "lastRow": 1,
+          "lastColumn": 0
         },
         {
-          "firstColumn": 0,
-          "lastColumn": 0,
+          "firstRow": 0,
+          "firstColumn": 1,
+          "lastRow": 1,
+          "lastColumn": 1
+        },
+        {
+          "firstRow": 0,
+          "firstColumn": 2,
+          "lastRow": 0,
+          "lastColumn": 11
+        },
+        {
           "firstRow": 2,
-          "lastRow": 5
+          "firstColumn": 0,
+          "lastRow": 16,
+          "lastColumn": 0
+        },
+        {
+          "firstRow": 17,
+          "firstColumn": 2,
+          "lastRow": 17,
+          "lastColumn": 11
+        },
+        {
+          "firstRow": 17,
+          "firstColumn": 0,
+          "lastRow": 17,
+          "lastColumn": 1
         }
       ],
       "data": [
-        [
-          "title"
-        ],
-        [
-          "index",
-          "name",
-          "number"
-        ],
-        [
-          "1",
-          "liukersun",
-          "1"
-        ],
-        [
-          "",
-          "2",
-          "2"
-        ],
-        [
-          "",
-          "3",
-          "3"
-        ],
-        [
-          "",
-          "4",
-          "4"
-        ]
+        ["构件名称","构件编号","各测区混凝土强度换算值（MPa）"],
+        ["","","1","2","3","4","5","6","7","8","9","10"],
+        ["前边梁","1#QBL3-4","47.6","46.7","43.4","43.1","41.3","40.4","38.6","36.1","38.1","37"],
+        ["","1#QBL5-6","35.8","39.3","37.4","37.9","40.1","41.6","43.4","38.6","39.9","38.2"],
+        ["","1#QBL7-8","43.4","42.8","41.1","43.4","40","40.8","40.6","40","38.6","39.5"],
+        ["","1#QBL9-10","36","36.8","37.9","36.3","38.8","37.5","39.2","37.4","39.9","43.1"],
+        ["","1#QBL11-12","39.9","41.3","39","40.2","40.8","36.1","37.5","38.2","39.9","41.9"],
+        ["","2#QBL3-4","42.5","42.9","43.2","43.2","40.2","41","42.1","40.4","40.6","42.5"],
+        ["","2#QBL5-6","42","43.9","45.7","45.3","45.3","43.2","43.7","42","43.7","47.3"],
+        ["","2#QBL7-8","41.9","42.7","43.6","43.2","40.4","38.5","39","40.4","40.2","43.1"],
+        ["","2#QBL9-10","38.8","38.8","37.7","39.7","39.5","40.5","41.2","44.9","44.7","43.5"],
+        ["","2#QBL11-12","41.7","39.5","39.9","39","38.6","37.7","39.5","41.7","40.8","41.7"],
+        ["","3#QBL3-4","41.9","43.9","38.4","37.5","38.3","43.5","41","43.9","43.4","44.1"],
+        ["","3#QBL5-6","43.9","45.7","41.6","44.6","44.7","45.9","44.1","45.1","40.5","44.7"],
+        ["","3#QBL7-8","39.3","42.8","43.1","43.7","42.4","46.2","44.3","42.8","41","41.9"],
+        ["","3#QBL9-10","44.4","40.4","42.7","38.5","41.2","43.6","41.6","45.8","40.8","42.5"],
+        ["","3#QBL11-12","44.8","45","41.6","47","47.1","44","43.6","44.2","45.8","42.9"],
+        ["该批构件混凝土强度推定值","批构件强度换算值平均值$a^{2}$,批构件强度换算值平均值$b^{2}$"]
       ]
     },
     "test2": {
+      "title": "",
       "col": 3,
       "row": 8,
       "mergeRules": [
@@ -103,44 +108,14 @@
         }
       ],
       "data": [
-        [
-          "title"
-        ],
-        [
-          "index",
-          "name",
-          "number"
-        ],
-        [
-          "1",
-          "liukersun",
-          "1"
-        ],
-        [
-          "",
-          "2",
-          "2"
-        ],
-        [
-          "",
-          "3",
-          "3"
-        ],
-        [
-          "",
-          "4",
-          "4"
-        ],
-        [
-          "",
-          "5",
-          "5"
-        ],
-        [
-          "",
-          "6",
-          "6"
-        ]
+        ["title"],
+        ["index","name","number"],
+        ["1","liukersun","1"],
+        ["","2","2"],
+        ["","3","3"],
+        ["","%pic01.jpg%","4"],
+        ["","5","5"],
+        ["","6","6"]
       ]
     }
   }

@@ -2,9 +2,17 @@ package org.PierDocx;
 
 import org.PierDocx.style.CellStyle;
 import org.PierDocx.utils.StyleUtils;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.openxmlformats.schemas.officeDocument.x2006.math.CTOMath;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import uk.ac.ed.ph.snuggletex.SnuggleEngine;
+import uk.ac.ed.ph.snuggletex.SnuggleInput;
+import uk.ac.ed.ph.snuggletex.SnuggleSession;
 
 import java.util.ArrayList;
+
+import static org.PierDocx.utils.LatexUtils._getOMML;
 
 public class PierTableCell {
     public XWPFTableCell cell;
@@ -52,7 +60,17 @@ public class PierTableCell {
         this.paragraphs_count += 1;
         return paragraph;
     }
-
+    public void addLatex(String latex) throws Exception {
+        SnuggleEngine engine = new SnuggleEngine();
+        SnuggleSession session = engine.createSession();
+        SnuggleInput input = new SnuggleInput(latex);
+        session.parseInput(input);
+        String mathML = session.buildXMLString();
+        CTOMath ctOMath = _getOMML(mathML);
+        XWPFParagraph para = this.cell.addParagraph();
+        CTP ctp =para.getCTP();
+        ctp.setOMathArray(new CTOMath[]{ctOMath});
+    }
     public PierParagraph getLastParagraph() {
         if (paragraphs_count == 0) {
             return new PierParagraph(this);

@@ -9,6 +9,7 @@ import org.apache.poi.xwpf.usermodel.IBody;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.openxmlformats.schemas.officeDocument.x2006.math.CTOMath;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBookmark;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import uk.ac.ed.ph.snuggletex.SnuggleEngine;
 import uk.ac.ed.ph.snuggletex.SnuggleInput;
@@ -25,11 +26,13 @@ public class PierRun {
     public XWPFRun run;
     PierParagraph paragraph;
 
+
     public PierRun(PierParagraph paragraph) {
         this.paragraph = paragraph;
         this.run = paragraph.getParagraph().createRun();
     }
-    public PierRun(PierParagraph paragraph,XWPFRun _run) {
+
+    public PierRun(PierParagraph paragraph, XWPFRun _run) {
         this.paragraph = paragraph;
         this.run = _run;
     }
@@ -80,6 +83,5 @@ public class PierRun {
         StyleUtils.styleRun(this, style);
         return this;
     }
-
 
 }

@@ -23,6 +23,18 @@ public class PierParagraph {
     private Boolean isTOC = false;
     private ParagraphStyle style;
 
+    public PierParagraph(PierDocument document) {
+        this.paragraph = document.document.createParagraph();
+    }
+
+    public PierParagraph(PierTableCell tableCell) {
+        this.paragraph = tableCell.cell.getParagraphArray(tableCell.cell.getParagraphs().size() - 1);
+    }
+
+    public PierParagraph(CTP prgrph, IBody part) {
+        this.paragraph = new XWPFParagraph(prgrph, part);
+    }
+
     public ArrayList<PierRun> getRuns() {
         this.runs = new ArrayList<>();
         if (!this.paragraph.getRuns().isEmpty()) {
@@ -41,7 +53,6 @@ public class PierParagraph {
         } else {
             return getRuns().get(size - 1);
         }
-
     }
 
     public ParagraphStyle getStyle() {
@@ -60,18 +71,6 @@ public class PierParagraph {
         return paragraph;
     }
 
-    public PierParagraph(PierDocument document) {
-        this.paragraph = document.document.createParagraph();
-    }
-
-    public PierParagraph(PierTableCell tableCell) {
-        this.paragraph = tableCell.cell.getParagraphArray(tableCell.cell.getParagraphs().size() - 1);
-    }
-
-    public PierParagraph(CTP prgrph, IBody part) {
-        this.paragraph = new XWPFParagraph(prgrph, part);
-    }
-
     public PierRun addRun() {
         PierRun run = new PierRun(this);
         this.runs.add(run);
@@ -79,10 +78,10 @@ public class PierParagraph {
         return run;
     }
 
-    public PierParagraph addPic(String pic_path, int width, int height, String title, RunStyle title_style) {
+    public PierParagraph addPic(String pic_path, int width, int height, String title, String title_style) {
         try (InputStream stream = new FileInputStream(pic_path)) {
             this.addStyle(new ParagraphStyle().setAlign(ParagraphAlignment.CENTER));
-            this.addRun().addText(title).addStyle(title_style);
+            this.addStyleById(title_style).addRun().addText(title).addReturn();
             this.addRun().run.addPicture(stream, get_pic_type(pic_path), "Generated", Units.toEMU(width), Units.toEMU(height));
             return this;
         } catch (IOException | InvalidFormatException e) {
@@ -118,10 +117,12 @@ public class PierParagraph {
         return this.paragraph.getCTP();
     }
 
+    @Deprecated
     public Boolean getTOC() {
         return isTOC;
     }
 
+    @Deprecated
     public void setTOC(Boolean TOC) {
         isTOC = TOC;
     }
