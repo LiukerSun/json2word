@@ -16,7 +16,7 @@ public class Main {
         JsonNode configJson = loadJson("Data/config.json");
         String tempFilePath = configJson.get("templateFile").asText();
         String resultFilePath = configJson.get("resultFile").asText();
-        PierDocument.addStyles2temp(configJson);
+        PierDocument.addStyles2temp(configJson,tempFilePath);
         JsonNode tableTest1 = configJson.get("tables").get("test1");
         JsonNode tableTest2 = configJson.get("tables").get("test2");
         PierDocument document = new PierDocument(tempFilePath);

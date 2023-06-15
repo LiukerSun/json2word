@@ -49,9 +49,8 @@ public class PierDocument {
         return getParagraphs().get(paragraphs_count - 1);
     }
 
-    public static void addStyles2temp(JsonNode configJson) {
+    public static void addStyles2temp(JsonNode configJson,String templateFile) {
         ArrayNode styleArray = (ArrayNode) configJson.get("Styles");
-        String templateFile = configJson.get("templateFile").asText();
         try (XWPFDocument document = new XWPFDocument()) {
             XWPFStyles styles = document.createStyles();
 

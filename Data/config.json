@@ -1,6 +1,6 @@
 {
-  "templateFile": "template.docx",
-  "resultFile": "result.docx",
+  "resultFile": "xxx检测项目报告.docx",
+  "testItems": {},
   "Styles": [
     {
       "styleName": "tableTitle",
@@ -113,7 +113,7 @@
         ["1","liukersun","1"],
         ["","2","2"],
         ["","3","3"],
-        ["","%pic01.jpg%","4"],
+        ["","4","4"],
         ["","5","5"],
         ["","6","6"]
       ]

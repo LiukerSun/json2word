@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.json2docx</groupId>
     <artifactId>json2docx</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
