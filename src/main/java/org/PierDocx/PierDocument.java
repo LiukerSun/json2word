@@ -32,6 +32,7 @@ public class PierDocument {
     public PierDocument(String docx_path) throws IOException {
         InputStream is = new FileInputStream(docx_path);
         this.document = new XWPFDocument(is);
+        is.close();
     }
 
     public PierDocument() {
@@ -53,12 +54,12 @@ public class PierDocument {
         ArrayNode styleArray = (ArrayNode) configJson.get("Styles");
         try (XWPFDocument document = new XWPFDocument()) {
             XWPFStyles styles = document.createStyles();
-
             for (JsonNode style : styleArray) {
                 styles.addStyle(new CustomParagraphStyles(style).addCustomStyle());
             }
-            final FileOutputStream out = new FileOutputStream(templateFile);
+            FileOutputStream out = new FileOutputStream(templateFile);
             document.write(out);
+            out.close();
         } catch (Exception e) {
             logger.error(e);
         }
@@ -165,8 +166,9 @@ public class PierDocument {
     }
 
     public void saveDocx(String docx_path) throws IOException {
-        final FileOutputStream out = new FileOutputStream(docx_path);
+        FileOutputStream out = new FileOutputStream(docx_path);
         this.document.write(out);
+        out.close();
     }
 
 }
