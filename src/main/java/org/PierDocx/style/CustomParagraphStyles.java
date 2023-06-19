@@ -69,18 +69,54 @@ public class CustomParagraphStyles {
         CTPPrGeneral pPr = ctStyle.addNewPPr();
         CTJc Jc = pPr.addNewJc();
         switch (this.alignmentType.toUpperCase()) {
-            case "START" -> Jc.setVal(STJc.Enum.forInt(1));
-            case "CENTER" -> Jc.setVal(STJc.Enum.forInt(2));
-            case "END" -> Jc.setVal(STJc.Enum.forInt(3));
-            case "BOTH" -> Jc.setVal(STJc.Enum.forInt(4));
-            case "MEDIUM_KASHIDA" -> Jc.setVal(STJc.Enum.forInt(5));
-            case "DISTRIBUTE" -> Jc.setVal(STJc.Enum.forInt(6));
-            case "NUM_TAB" -> Jc.setVal(STJc.Enum.forInt(7));
-            case "HIGH_KASHIDA" -> Jc.setVal(STJc.Enum.forInt(8));
-            case "LOW_KASHIDA" -> Jc.setVal(STJc.Enum.forInt(9));
-            case "THAI_DISTRIBUTE" -> Jc.setVal(STJc.Enum.forInt(10));
-            case "LEFT" -> Jc.setVal(STJc.Enum.forInt(11));
-            case "RIGHT" -> Jc.setVal(STJc.Enum.forInt(12));
+            case "START": {
+                Jc.setVal(STJc.Enum.forInt(1));
+                break;
+            }
+            case "CENTER": {
+                Jc.setVal(STJc.Enum.forInt(2));
+                break;
+            }
+            case "END": {
+                Jc.setVal(STJc.Enum.forInt(3));
+                break;
+            }
+            case "BOTH": {
+                Jc.setVal(STJc.Enum.forInt(4));
+                break;
+            }
+            case "MEDIUM_KASHIDA": {
+                Jc.setVal(STJc.Enum.forInt(5));
+                break;
+            }
+            case "DISTRIBUTE": {
+                Jc.setVal(STJc.Enum.forInt(6));
+                break;
+            }
+            case "NUM_TAB": {
+                Jc.setVal(STJc.Enum.forInt(7));
+                break;
+            }
+            case "HIGH_KASHIDA": {
+                Jc.setVal(STJc.Enum.forInt(8));
+                break;
+            }
+            case "LOW_KASHIDA": {
+                Jc.setVal(STJc.Enum.forInt(9));
+                break;
+            }
+            case "THAI_DISTRIBUTE": {
+                Jc.setVal(STJc.Enum.forInt(10));
+                break;
+            }
+            case "LEFT": {
+                Jc.setVal(STJc.Enum.forInt(11));
+                break;
+            }
+            case "RIGHT": {
+                Jc.setVal(STJc.Enum.forInt(12));
+                break;
+            }
         }
         // style shows up in the formats bar
         CTOnOff onOffNull = CTOnOff.Factory.newInstance();

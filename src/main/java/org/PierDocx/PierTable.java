@@ -65,22 +65,23 @@ public class PierTable {
             _mergeType = "RowOnly";
         }
 
+
         switch (_mergeType) {
-            case "Both" -> {
+            case "Both": {
                 for (int row = firstRow; row <= lastRow; row++) {
                     this.mergeCellsHorizontal(row, firstColumn, lastColumn);
                 }
                 this.mergeCellsVertically(firstColumn, firstRow, lastRow);
+                break;
             }
-            case "RowOnly" -> {
+            case "RowOnly": {
                 this.mergeCellsHorizontal(firstRow, firstColumn, lastColumn);
-
+                break;
             }
-            case "ColOnly" -> {
+            case "ColOnly": {
                 this.mergeCellsVertically(firstColumn, firstRow, lastRow);
-
+                break;
             }
-
         }
 
 
