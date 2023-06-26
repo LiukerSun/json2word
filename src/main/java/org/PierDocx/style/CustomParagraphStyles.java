@@ -59,8 +59,8 @@ public class CustomParagraphStyles {
             font_ppr.addNewB();
         }
         if (this.isUnderLine) {
-            font_ppr.addNewU();
-            font_ppr.addNewI();
+            CTUnderline u = font_ppr.addNewU();
+            u.setVal(STUnderline.Enum.forString("single"));
         }
         if (this.isItalic) {
             font_ppr.addNewI();
